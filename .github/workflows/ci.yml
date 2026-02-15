@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Coupon CI/CD
 
 on:
   push:
