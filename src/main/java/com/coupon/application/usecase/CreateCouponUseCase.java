@@ -19,7 +19,7 @@ public class CreateCouponUseCase {
         Coupon coupon = new Coupon(code, description, discountValue, expirationDate, isPublished);
 
         if (couponGateway.existsByCode(coupon.getCodeValue())) {
-            throw new IllegalStateException("Coupon with code '" + coupon.getCodeValue() + "' already exists");
+            throw new IllegalStateException("Coupon with code '" + coupon.getCodeValue() + "' already exists. Only the first 6 alphanumeric characters are considered");
         }
 
         return couponGateway.save(coupon);

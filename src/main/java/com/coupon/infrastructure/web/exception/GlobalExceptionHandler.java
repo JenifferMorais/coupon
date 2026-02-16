@@ -1,5 +1,7 @@
 package com.coupon.infrastructure.web.exception;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -63,6 +65,11 @@ public class GlobalExceptionHandler {
                     : invalidFormat.getPath().get(0).getFieldName();
             String targetType = invalidFormat.getTargetType().getSimpleName();
             message = "Invalid value for field '" + field + "': expected type " + targetType;
+        } else if (ex.getCause() instanceof JsonMappingException mappingEx && !mappingEx.getPath().isEmpty()) {
+            String field = mappingEx.getPath().get(0).getFieldName();
+            message = "Invalid value for field '" + field + "'";
+        } else if (ex.getCause() instanceof JsonParseException parseEx) {
+            message = extractHint(parseEx.getOriginalMessage());
         }
 
         ErrorResponse error = new ErrorResponse(
@@ -140,6 +147,19 @@ public class GlobalExceptionHandler {
                 "An unexpected error occurred"
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    private String extractHint(String originalMessage) {
+        if (originalMessage == null) {
+            return "Check JSON syntax";
+        }
+        if (originalMessage.contains("Leading zeroes not allowed")) {
+            return "Leading zeroes are not allowed in numeric values (e.g. use 9 instead of 09)";
+        }
+        if (originalMessage.contains("Unexpected character")) {
+            return "Unexpected character found. Check for syntax errors (e.g. using comma instead of dot for decimals)";
+        }
+        return "Check JSON syntax";
     }
 
     public record ErrorResponse(

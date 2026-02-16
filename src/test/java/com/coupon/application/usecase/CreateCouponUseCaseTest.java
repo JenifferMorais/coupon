@@ -115,7 +115,7 @@ class CreateCouponUseCaseTest {
             );
         });
 
-        assertEquals("Coupon with code 'ABC123' already exists", exception.getMessage());
+        assertEquals("Coupon with code 'ABC123' already exists. Only the first 6 alphanumeric characters are considered", exception.getMessage());
         verify(gateway, never()).save(any());
     }
 
