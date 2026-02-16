@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,12 +47,33 @@ class GetCouponByIdUseCaseTest {
     void shouldThrowExceptionWhenNotFound() {
         when(gateway.findById("invalid-id")).thenReturn(Optional.empty());
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
                 () -> useCase.execute("invalid-id")
         );
 
         assertEquals("Coupon not found", exception.getMessage());
         verify(gateway, times(1)).findById("invalid-id");
+    }
+
+    @Test
+    void shouldThrowExceptionWhenCouponIsDeleted() {
+        Coupon coupon = new Coupon(
+                "ABC123",
+                "Test",
+                "10.0",
+                LocalDateTime.now().plusDays(5),
+                false
+        );
+        coupon.delete();
+
+        when(gateway.findById("deleted-id")).thenReturn(Optional.of(coupon));
+
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () -> useCase.execute("deleted-id")
+        );
+
+        assertEquals("Coupon is not active", exception.getMessage());
     }
 }

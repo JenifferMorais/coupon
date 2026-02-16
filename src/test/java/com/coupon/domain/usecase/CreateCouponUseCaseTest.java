@@ -87,6 +87,39 @@ class CreateCouponUseCaseTest {
     }
 
     @Test
+    void shouldRejectNullDescription() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            useCase.execute(
+                    "ABC123",
+                    null,
+                    "10.0",
+                    LocalDateTime.now().plusDays(5),
+                    false
+            );
+        });
+
+        verify(gateway, never()).save(any());
+    }
+
+    @Test
+    void shouldRejectDuplicateCode() {
+        when(gateway.existsByCode("ABC123")).thenReturn(true);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            useCase.execute(
+                    "ABC123",
+                    "Test",
+                    "10.0",
+                    LocalDateTime.now().plusDays(5),
+                    false
+            );
+        });
+
+        assertEquals("Coupon with code 'ABC123' already exists", exception.getMessage());
+        verify(gateway, never()).save(any());
+    }
+
+    @Test
     void shouldCreateAsPublishedWhenRequested() {
         when(gateway.save(any(Coupon.class))).thenAnswer(i -> i.getArguments()[0]);
 

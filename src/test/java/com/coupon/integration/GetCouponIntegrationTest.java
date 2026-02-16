@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -51,6 +52,34 @@ class GetCouponIntegrationTest {
         mockMvc.perform(get("/coupon/" + id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("ABC123"));
+    }
+
+    @Test
+    void shouldReturn404WhenCouponNotFound() throws Exception {
+        mockMvc.perform(get("/coupon/nonexistent-id"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Coupon not found"));
+    }
+
+    @Test
+    void shouldReturn404WhenCouponIsDeleted() throws Exception {
+        Map<String, Object> createRequest = buildRequest("DEL123", "To delete", 10.0,
+                LocalDateTime.now().plusDays(7), false);
+
+        String response = mockMvc.perform(post("/coupon")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createRequest)))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        String id = objectMapper.readTree(response).get("id").asText();
+
+        mockMvc.perform(delete("/coupon/" + id))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/coupon/" + id))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Coupon is not active"));
     }
 
     private Map<String, Object> buildRequest(String code, String description,
