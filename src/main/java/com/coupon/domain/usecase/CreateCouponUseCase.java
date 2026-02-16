@@ -18,6 +18,10 @@ public class CreateCouponUseCase {
 
         Coupon coupon = new Coupon(code, description, discountValue, expirationDate, isPublished);
 
+        if (couponGateway.existsByCode(coupon.getCodeValue())) {
+            throw new IllegalStateException("Coupon with code '" + coupon.getCodeValue() + "' already exists");
+        }
+
         return couponGateway.save(coupon);
     }
 }

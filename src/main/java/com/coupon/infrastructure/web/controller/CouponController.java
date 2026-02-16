@@ -68,7 +68,7 @@ public class CouponController {
                 coupon.getDescription(),
                 coupon.getDiscountValueAmount(),
                 coupon.getExpirationDateValue(),
-                coupon.getStatus(),
+                coupon.getStatus().name(),
                 coupon.isPublished(),
                 coupon.isRedeemed()
         );
