@@ -1,9 +1,9 @@
 package com.coupon.infrastructure.config;
 
 import com.coupon.domain.gateway.CouponGateway;
-import com.coupon.domain.usecase.CreateCouponUseCase;
-import com.coupon.domain.usecase.DeleteCouponUseCase;
-import com.coupon.domain.usecase.GetCouponByIdUseCase;
+import com.coupon.application.usecase.CreateCouponUseCase;
+import com.coupon.application.usecase.DeleteCouponUseCase;
+import com.coupon.application.usecase.GetCouponByIdUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

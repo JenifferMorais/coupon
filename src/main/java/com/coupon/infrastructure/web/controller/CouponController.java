@@ -1,9 +1,9 @@
 package com.coupon.infrastructure.web.controller;
 
 import com.coupon.domain.entity.Coupon;
-import com.coupon.domain.usecase.CreateCouponUseCase;
-import com.coupon.domain.usecase.DeleteCouponUseCase;
-import com.coupon.domain.usecase.GetCouponByIdUseCase;
+import com.coupon.application.usecase.CreateCouponUseCase;
+import com.coupon.application.usecase.DeleteCouponUseCase;
+import com.coupon.application.usecase.GetCouponByIdUseCase;
 import com.coupon.infrastructure.web.dto.CreateCouponRequest;
 import com.coupon.infrastructure.web.dto.CouponResponse;
 import io.swagger.v3.oas.annotations.Operation;

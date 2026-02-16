@@ -1,4 +1,4 @@
-package com.coupon.domain.usecase;
+package com.coupon.application.usecase;
 
 import com.coupon.domain.entity.Coupon;
 import com.coupon.domain.entity.CouponStatus;
