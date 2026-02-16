@@ -1,4 +1,4 @@
-package com.coupon.domain.usecase;
+package com.coupon.application.usecase;
 
 import com.coupon.domain.entity.Coupon;
 import com.coupon.domain.gateway.CouponGateway;
@@ -17,6 +17,10 @@ public class CreateCouponUseCase {
         boolean isPublished = published != null && published;
 
         Coupon coupon = new Coupon(code, description, discountValue, expirationDate, isPublished);
+
+        if (couponGateway.existsByCode(coupon.getCodeValue())) {
+            throw new IllegalStateException("Coupon with code '" + coupon.getCodeValue() + "' already exists. Only the first 6 alphanumeric characters are considered");
+        }
 
         return couponGateway.save(coupon);
     }

@@ -120,6 +120,85 @@ class CreateCouponIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void shouldRejectDuplicateCouponCode() throws Exception {
+        Map<String, Object> request = buildRequest("ABC123", "First coupon", 10.0,
+                LocalDateTime.now().plusDays(7), false);
+
+        mockMvc.perform(post("/coupon")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/coupon")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message", containsString("already exists")));
+    }
+
+    @Test
+    void shouldRejectInvalidExpirationDateFormat() throws Exception {
+        String json = """
+                {
+                  "code": "ABC123",
+                  "description": "Test",
+                  "discountValue": 10.0,
+                  "expirationDate": "2026-d11-04T17:14:45.18Z",
+                  "published": false
+                }
+                """;
+
+        mockMvc.perform(post("/coupon")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", containsString("expirationDate")));
+    }
+
+    @Test
+    void shouldRejectInvalidDiscountValueFormat() throws Exception {
+        String json = """
+                {
+                  "code": "ABC123",
+                  "description": "Test",
+                  "discountValue": "abc",
+                  "expirationDate": "2026-11-04T17:14:45.18",
+                  "published": false
+                }
+                """;
+
+        mockMvc.perform(post("/coupon")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", containsString("discountValue")));
+    }
+
+    @Test
+    void shouldRejectEmptyBody() throws Exception {
+        mockMvc.perform(post("/coupon")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRejectMalformedJson() throws Exception {
+        mockMvc.perform(post("/coupon")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{invalid json}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRejectUnsupportedMediaType() throws Exception {
+        mockMvc.perform(post("/coupon")
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content("some text"))
+                .andExpect(status().isUnsupportedMediaType());
+    }
+
     private Map<String, Object> buildRequest(String code, String description,
                                               Double discountValue, LocalDateTime expirationDate,
                                               Boolean published) {

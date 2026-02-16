@@ -1,4 +1,4 @@
-package com.coupon.domain.usecase;
+package com.coupon.application.usecase;
 
 import com.coupon.domain.entity.Coupon;
 import com.coupon.domain.gateway.CouponGateway;
@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,8 +48,8 @@ class DeleteCouponUseCaseTest {
     void shouldThrowExceptionWhenCouponNotFound() {
         when(gateway.findById("invalid-id")).thenReturn(Optional.empty());
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
                 () -> useCase.execute("invalid-id")
         );
 

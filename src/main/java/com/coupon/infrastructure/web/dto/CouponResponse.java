@@ -1,6 +1,5 @@
 package com.coupon.infrastructure.web.dto;
 
-import com.coupon.domain.entity.CouponStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +29,7 @@ public class CouponResponse {
     private LocalDateTime expirationDate;
 
     @Schema(description = "Coupon status", example = "ACTIVE", required = true)
-    private CouponStatus status;
+    private String status;
 
     @Schema(description = "Whether the coupon is published", example = "false", required = true, defaultValue = "false")
     private boolean published;

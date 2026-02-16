@@ -38,7 +38,6 @@ public class Coupon {
         return new DiscountValue(new java.math.BigDecimal(value));
     }
 
-    // Construtor para reconstruir entidade (usado pelo Gateway)
     private Coupon(String id, CouponCode code, String description, DiscountValue discountValue,
                    ExpirationDate expirationDate, CouponStatus status, boolean published,
                    boolean redeemed, LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -63,7 +62,7 @@ public class Coupon {
             new CouponCode(code),
             description,
             new DiscountValue(new java.math.BigDecimal(discountValue)),
-            new ExpirationDate(expirationDate),
+            ExpirationDate.reconstitute(expirationDate),
             status,
             published,
             redeemed,

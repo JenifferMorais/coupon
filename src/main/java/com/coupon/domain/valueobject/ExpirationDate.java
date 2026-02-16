@@ -11,6 +11,15 @@ public class ExpirationDate {
         this.value = value;
     }
 
+    private ExpirationDate(LocalDateTime value, boolean skipValidation) {
+        if (!skipValidation) validate(value);
+        this.value = value;
+    }
+
+    public static ExpirationDate reconstitute(LocalDateTime value) {
+        return new ExpirationDate(value, true);
+    }
+
     private void validate(LocalDateTime value) {
         if (value == null) {
             throw new IllegalArgumentException("Expiration date is required");

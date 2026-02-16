@@ -1,4 +1,4 @@
-package com.coupon.domain.usecase;
+package com.coupon.application.usecase;
 
 import com.coupon.domain.entity.Coupon;
 import com.coupon.domain.gateway.CouponGateway;
@@ -83,6 +83,39 @@ class CreateCouponUseCaseTest {
             );
         });
 
+        verify(gateway, never()).save(any());
+    }
+
+    @Test
+    void shouldRejectNullDescription() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            useCase.execute(
+                    "ABC123",
+                    null,
+                    "10.0",
+                    LocalDateTime.now().plusDays(5),
+                    false
+            );
+        });
+
+        verify(gateway, never()).save(any());
+    }
+
+    @Test
+    void shouldRejectDuplicateCode() {
+        when(gateway.existsByCode("ABC123")).thenReturn(true);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            useCase.execute(
+                    "ABC123",
+                    "Test",
+                    "10.0",
+                    LocalDateTime.now().plusDays(5),
+                    false
+            );
+        });
+
+        assertEquals("Coupon with code 'ABC123' already exists. Only the first 6 alphanumeric characters are considered", exception.getMessage());
         verify(gateway, never()).save(any());
     }
 

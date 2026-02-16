@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,8 +53,8 @@ class DeleteCouponIntegrationTest {
                 .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/coupon/" + id))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("DELETED"));
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Coupon is not active"));
     }
 
     @Test
