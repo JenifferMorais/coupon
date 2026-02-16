@@ -31,7 +31,7 @@ public class CouponController {
     }
 
     @PostMapping
-    @Operation(summary = "/coupon", tags = {"coupon"})
+    @Operation(summary = "Create coupon")
     @ApiResponse(responseCode = "201")
     public ResponseEntity<CouponResponse> create(@Valid @RequestBody CreateCouponRequest request) {
         Coupon coupon = createCouponUseCase.execute(
@@ -46,7 +46,7 @@ public class CouponController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "/coupon/{id}", tags = {"coupon"})
+    @Operation(summary = "Get coupon by ID")
     @ApiResponse(responseCode = "200")
     public ResponseEntity<CouponResponse> getById(@PathVariable String id) {
         Coupon coupon = getCouponByIdUseCase.execute(id);
@@ -54,7 +54,7 @@ public class CouponController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "/coupon/{id}", tags = {"coupon"})
+    @Operation(summary = "Delete coupon")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         deleteCouponUseCase.execute(id);
