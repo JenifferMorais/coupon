@@ -15,6 +15,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - zipkin
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
       interval: 30s
@@ -43,5 +44,40 @@ services:
       - "6379:6379"
     restart: unless-stopped
 
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: coupon-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    depends_on:
+      - coupon-api
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:10.4.0
+    container_name: coupon-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  zipkin:
+    image: openzipkin/zipkin:3.4
+    container_name: coupon-zipkin
+    ports:
+      - "9411:9411"
+    restart: unless-stopped
+
 volumes:
   postgres-data:
+  prometheus-data:
+  grafana-data:
