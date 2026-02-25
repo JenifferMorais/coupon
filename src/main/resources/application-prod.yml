@@ -1,3 +1,7 @@
+logging:
+  level:
+    com.coupon: INFO
+
 spring:
   datasource:
     url: ${DATABASE_URL}

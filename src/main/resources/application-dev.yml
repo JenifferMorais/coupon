@@ -1,3 +1,7 @@
+logging:
+  level:
+    com.coupon: DEBUG
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/coupondb

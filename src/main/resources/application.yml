@@ -19,6 +19,10 @@ spring:
   flyway:
     enabled: true
 
+logging:
+  level:
+    com.coupon: INFO
+
 server:
   port: 8080
 
