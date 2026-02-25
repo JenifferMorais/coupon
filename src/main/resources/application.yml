@@ -1,4 +1,7 @@
 spring:
+  profiles:
+    active: dev
+
   application:
     name: coupon
 
@@ -8,12 +11,13 @@ spring:
       time-to-live: 3600000
 
   jpa:
-    hibernate:
-      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+
+  flyway:
+    enabled: true
 
 server:
   port: 8080
