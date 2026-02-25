@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: jdbc:h2:file:./data/coupondb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: ${DB_PASSWORD:}
+    url: ${DATABASE_URL}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: false
   data:
     redis:
