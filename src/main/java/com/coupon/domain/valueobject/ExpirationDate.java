@@ -1,5 +1,7 @@
 package com.coupon.domain.valueobject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -32,6 +34,7 @@ public class ExpirationDate {
         }
     }
 
+    @JsonIgnore
     public boolean isExpired() {
         return LocalDateTime.now().isAfter(value);
     }
