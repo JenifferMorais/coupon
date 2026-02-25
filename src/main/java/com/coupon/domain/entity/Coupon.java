@@ -18,6 +18,8 @@ public class Coupon {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private Coupon() {}
+
     public Coupon(String code, String description, String discountValue,
                   LocalDateTime expirationDate, boolean published) {
         this.code = new CouponCode(code);

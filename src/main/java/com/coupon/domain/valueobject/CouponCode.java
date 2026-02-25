@@ -4,7 +4,9 @@ import java.util.Objects;
 
 public class CouponCode {
     private static final int CODE_LENGTH = 6;
-    private final String value;
+    private String value;
+
+    private CouponCode() {}
 
     public CouponCode(String code) {
         this.value = sanitizeAndValidate(code);

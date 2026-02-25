@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class ExpirationDate {
-    private final LocalDateTime value;
+    private LocalDateTime value;
+
+    private ExpirationDate() {}
 
     public ExpirationDate(LocalDateTime value) {
         validate(value);

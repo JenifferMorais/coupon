@@ -5,7 +5,9 @@ import java.util.Objects;
 
 public class DiscountValue {
     private static final BigDecimal MINIMUM_VALUE = new BigDecimal("0.5");
-    private final BigDecimal value;
+    private BigDecimal value;
+
+    private DiscountValue() {}
 
     public DiscountValue(BigDecimal value) {
         validate(value);
