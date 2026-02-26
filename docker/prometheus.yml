@@ -5,4 +5,4 @@ scrape_configs:
   - job_name: 'coupon-api'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['coupon-api:8080']
+      - targets: ['host.docker.internal:8080', 'coupon-api:8080']
