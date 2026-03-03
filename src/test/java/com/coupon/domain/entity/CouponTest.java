@@ -142,4 +142,12 @@ class CouponTest {
         coupon.redeem();
         assertFalse(coupon.isValid());
     }
+
+    @Test
+    void  testeReview(){
+        String description = "     ";
+        Coupon coupon = new Coupon("ABC123", description, "10.0", LocalDateTime.now().plusDays(5), true);
+
+        assertEquals(description, coupon.getDescription());
+    }
 }
