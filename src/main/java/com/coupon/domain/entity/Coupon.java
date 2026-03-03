@@ -29,6 +29,7 @@ public class Coupon {
         this.redeemed = false;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+
     }
 
     private DiscountValue createDiscountValue(String value) {
@@ -72,7 +73,7 @@ public class Coupon {
     }
 
     private String validateDescription(String description) {
-        if (description == null || description.isEmpty()) {
+        if (description == null || description.isBlank()) {
             throw new IllegalArgumentException("Description is required");
         }
         return description;
